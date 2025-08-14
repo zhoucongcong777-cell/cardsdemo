@@ -1,12 +1,18 @@
 import random
 from enum import Enum
-# from magic_cards import HealingPriest, FireMage
+
+# class Position(Enum):
+#     """单位位置类型枚举"""
+#     FRONT = "前线"   
+#     BACK = "后方"    
 
 
 class CardType(Enum):
     """卡牌大类"""
     UNIT = "单位"
     MAGIC = "法术"
+
+
  
 class Card:
     """卡牌细类"""
@@ -18,6 +24,10 @@ class Card:
 
     def __str__(self):
         return f"{self.name} ({self.type.value}) - 费用:{self.cost}\n描述:{self.describtion}"
+
+    #  def __str__(self):
+    #     position = f", 位置: {self.position.value}" if hasattr(self, 'position') else ""
+    #     return f"{self.name} ({self.type.value}) - 费用: {self.cost}{position}\n描述: {self.description}"
     
     def on_draw(self,player,opponent):
         """抽取效果"""
@@ -35,11 +45,17 @@ class UnitCard(Card):
         super().__init__(name, CardType.UNIT, description, cost)
         self.attack = attack
         self.health = health
-        self.current_health = health         
+        self.current_health = health    
+        self.has_moved = False  # 添加移动状态标记        how
+        self.position = None    # 添加位置标记
+
+        # self.position = position
 
     def __str__(self):
         base = super().__str__()
-        return f"{base}\n攻击力: {self.attack}, 生命值: {self.current_health}/{self.health}"
+        position_info = f", 位置: {self.position}" if self.position else ""
+        return f"{base}\n攻击力: {self.attack}, 生命值: {self.current_health}/{self.health}{position_info}"
+
 
     def take_damage(self, amount):
         """单位受到伤害"""
